@@ -1,3 +1,4 @@
+import re
 import sys
 from collections import UserDict
 from datetime import datetime, date
@@ -9,28 +10,75 @@ class Field():
 
 
 class Name(Field):
-    def __init__(self, value: str) -> None:
+    def __init__(self) -> None:
         Field.__init__(self)
-        self.value = value
+        self.__value = None
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        if (new_value != None) and (new_value != ""):
+            self.__value = new_value
+        else:
+            print("Enter value!")
 
 
 class Phone(Field):
-    def __init__(self, value: str) -> None:
+    def __init__(self, value) -> None:
         Field.__init__(self)
-        self.value = value
+        self.__value = None
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        result = re.find(
+            r"[+380]?[(]?[0-9]{2}[)]?[0-9]{3}[-][0-9]{1,2}[-][0-9]{2,3}\b", new_value)
+        if result != -1:
+            return result
+        else:
+            print("This is not a phone!")
 
 
-class Birthday():
+class Birthday(Field):
     def __init__(self, value):
-        self.value = datetime(value)
+        self.__value = None
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        if (type(new_value) == datetime) or (type(new_value) == date):
+            self.value = new_value
+        elif type(new_value) == str:
+            try:
+                if "-" in new_value:
+                    d_list = new_value.split("-")
+                elif "/" in new_value:
+                    d_list = new_value.split("/")
+                elif "." in new_value:
+                    d_list = new_value.split(".")
+                if len(d_list[0]) == 4:
+                    self.value = datetime(
+                        year=int(d_list[0]), month=int(d_list[1]), day=int(d_list[2]))
+                else:
+                    self.value = datetime(
+                        year=int(d_list[-1]), month=int(d_list[-2]), day=int(d_list[-3]))
+            except:
+                print("This is not a date!")
 
 
 class Record():
-    def __init__(self, name, phone, data=None) -> None:
-        if type(name) == Name:
-            self.name = name
-        else:
-            self.name = Name(str(name))
+    def __init__(self, name: Name, phone, data: Birthday = None) -> None:
+        self.name = name
+        self.data = data
         self.phone = []
         if type(phone) == Phone:
             self.phone.append(phone)
@@ -43,10 +91,6 @@ class Record():
                 self.phone.append(Phone(p))
         else:
             self.phone.append(Phone(str(phone)))
-        if type(data) == Birthday:
-            self.data = data
-        else:
-            self.data = Birthday(data)
 
     def add_phone(self, phone_new):
         self.phone.append(Phone(phone_new))
@@ -74,9 +118,15 @@ class Record():
 class AddressBook(UserDict):
     def __init__(self) -> None:
         UserDict.__init__(self)
+        self.current_page = 0
+        self.on_pages = 50
 
-    def __setitem__(self, name: str, phone) -> None:
-        self.data[name] = Record(name, phone)
+    def __next__(self):
+        max_page = len(self.data)/50
+        if self.current_page <= max_page:
+            self.current_page +=
+            return  # генератор!!!
+        raise StopIteration
 
     def add_record(self, record: Record):
         """Функція додання запису"""
@@ -129,6 +179,11 @@ class AddressBook(UserDict):
             print(" ".join(result))
         except Exception as e:
             print("Error!", e.args)
+
+
+class AddressBookPage:
+    def __iter__(self):
+        return AddressBook()
 
 
 class User():
