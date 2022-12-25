@@ -27,9 +27,10 @@ while True:
     #     input_list.remove("")
     for i in input_list:
         if i.isalpha():
-            name = Name(i)
+            name = i
             input_list.remove(i)
-            phone = Phone(" ".join(input_list))
+            phone = " ".join(input_list)
+            new_record = Record(name, phone)
             break
     # ----------------------------Виконання команди--------------------------------------
     if input_com == "hello":
@@ -38,17 +39,17 @@ while True:
         user_1.command_exit()
     elif input_com == "add":
         try:
-            address_book.add_record(name.name, phone.phone)
+            address_book.add_record(new_record)
         except:
             print("Give me name and phone please!")
     elif input_com == "change":
         try:
-            address_book.change_record(name.name, phone.phone)
+            address_book.change_record(new_record)
         except:
             print("Give me name and phone please!")
     elif input_com == "phone":
         try:
-            address_book.search_phone(name.name)
+            address_book.search_phone(name)
         except:
             print("Enter user name!")
     elif input_com == "show all":
