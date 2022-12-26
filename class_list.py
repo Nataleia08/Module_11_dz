@@ -122,8 +122,8 @@ class AddressBook(UserDict):
         self.on_pages = 50
         self.number_record = 0
 
-    def __repr__(self) -> str:
-        return super().__repr__()
+    def __iter__(self):
+        return self
 
     def __next__(self):
         max_page = len(self.data)/50
@@ -200,9 +200,9 @@ class AddressBook(UserDict):
             print("Error!", e.args)
 
 
-class AddressBookPage:
-    def __iter__(self):
-        return AddressBook()
+# class AddressBookPage:
+#     def __iter__(self):
+#         return AddressBook()
 
 
 class User():

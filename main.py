@@ -1,13 +1,14 @@
 import sys
 import re
 from collections import UserDict
-from class_list import Field, Name, Phone, Record, AddressBook, User, Birthday
+from class_list import Field, Name, Phone, Record, AddressBook, User, Birthday, AddressBookPage
 
 
 address_book = AddressBook()
 user_1 = User()
+# list_address_book = AddressBookPage()
 command_list = ["hello", "add", "change",
-                "phone", "show all", "close", "exit", "good bye", "birthday"]
+                "phone", "show all", "close", "exit", "good bye", "birthday", "show all on page"]
 while True:
     command_name = Name()
     command_phone = Phone()
