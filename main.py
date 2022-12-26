@@ -1,7 +1,7 @@
 import sys
 import re
 from collections import UserDict
-from class_list import Field, Name, Phone, Record, AddressBook, User
+from class_list import Field, Name, Phone, Record, AddressBook, User, Birthday
 
 
 address_book = AddressBook()
@@ -9,6 +9,9 @@ user_1 = User()
 command_list = ["hello", "add", "change",
                 "phone", "show all", "close", "exit", "good bye", "birthday"]
 while True:
+    command_name = Name()
+    command_phone = Phone()
+    command_birthday = Birthday()
     # ----------------------------Розпізнавання введенної команди-----------------------
     command_string = input("Enter command:").lower()
     if command_string == ".":
@@ -30,6 +33,7 @@ while True:
             name = i
             input_list.remove(i)
             break
+    command_name.value = name
     # ------------------------------Пошук телефону------------------------------------------------
     phone_list_dop = []
     for i in input_list:
@@ -37,6 +41,7 @@ while True:
             phone_list_dop.append(
                 re.find(r"[+380]?[(]?[0-9]{2}[)]?[0-9]{3}[-][0-9]{1,2}[-][0-9]{2,3}\b", i))
             input_list.remove(i)
+    command_phone.value = phone_list_dop
     # ------------------------------Пошук дати народження---------------------------------------------
     date_birthday = None
     for i in input_list:
@@ -48,6 +53,7 @@ while True:
             date_birthday = re.find(
                 r"[0-9]{2}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{4}", i)
             break
+    command_birthday.value = date_birthday
     new_record = Record(name, phone_list_dop, date_birthday)
     # ----------------------------Виконання команди--------------------------------------
     if input_com == "hello":

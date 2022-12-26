@@ -120,12 +120,31 @@ class AddressBook(UserDict):
         UserDict.__init__(self)
         self.current_page = 0
         self.on_pages = 50
+        self.number_record = 0
+
+    def __repr__(self) -> str:
+        return super().__repr__()
 
     def __next__(self):
         max_page = len(self.data)/50
-        if self.current_page <= max_page:
-            self.current_page +=
-            return  # генератор!!!
+        try:
+            result = []
+            for key_name in self.data.keys():
+                k = key_name.title()
+                result.append(k)
+                self.number_record += 1
+                phone_l = self.data[key_name].phone
+                for i in phone_l:
+                    result.append(str(i.value))
+                result.append("\n")
+                if self.current_page*self.on_pages >= self.number_record:
+                    yield (" ".join(result))
+             if self.current_page <= max_page:
+                self.current_page += 1
+            else:
+                self.current_page = 0
+        except Exception as e:
+            print("Error!", e.args)
         raise StopIteration
 
     def add_record(self, record: Record):
