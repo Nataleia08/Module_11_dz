@@ -103,7 +103,7 @@ while True:
             print("No date!")
     elif input_com == "show all on page":
         try:
-            address_book.__next__()
+            next(address_book)
         except:
             print("No data!")
     else:

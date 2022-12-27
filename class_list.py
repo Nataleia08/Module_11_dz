@@ -114,7 +114,7 @@ class AddressBook(UserDict):
     def __init__(self) -> None:
         UserDict.__init__(self)
         self.current_page = 1
-        self.on_pages = 5
+        self.on_pages = 2
         self.number_record = 0
 
     def __iter__(self):
@@ -128,15 +128,15 @@ class AddressBook(UserDict):
         try:
             result = []
             for key_name in self.data.keys():
-                k = key_name.title()
-                result.append(k)
-                self.number_record += 1
-                phone_l = self.data[key_name].phone
-                for i in phone_l:
-                    result.append(str(i.value))
-                result.append("\n")
-                if self.current_page*self.on_pages >= self.number_record:
-                    yield (" ".join(result))
+                while self.current_page*self.on_pages < self.number_record:
+                    k = key_name.title()
+                    result.append(k)
+                    self.number_record += 1
+                    phone_l = self.data[key_name].phone
+                    for i in phone_l:
+                        result.append(str(i.value))
+                    result.append("\n")
+            yield (" ".join(result))
             if self.current_page <= max_page:
                 self.current_page += 1
             else:
