@@ -1,7 +1,7 @@
 import sys
 import re
 from collections import UserDict
-from class_list import Field, Name, Phone, Record, AddressBook, User, Birthday, AddressBookPage
+from class_list import Field, Name, Phone, Record, AddressBook, User, Birthday
 
 
 address_book = AddressBook()
@@ -11,9 +11,8 @@ command_list = ["hello", "add", "change",
                 "phone", "show all", "close", "exit", "good bye", "birthday", "show all on page"]
 while True:
     command_name = Name()
-    command_phone = Phone()
     command_birthday = Birthday()
-    # ----------------------------Розпізнавання введенної команди-----------------------
+# ----------------------------Розпізнавання введенної команди-----------------------
     command_string = input("Enter command:").lower()
     if command_string == ".":
         break
@@ -28,46 +27,52 @@ while True:
         print("Command undefined! Try again!")
         continue
     input_list = attribute_sring.split(" ")
-    # ------------------------------Пошук імені -----------------------------------------------
-    for i in input_list:
-        if i.isalpha():
-            name = i
-            input_list.remove(i)
-            break
-    command_name.value = name
-    # ------------------------------Пошук телефону------------------------------------------------
-    phone_list_dop = []
-    for i in input_list:
-        if re.find(r"[+380]?[(]?[0-9]{2}[)]?[0-9]{3}[-][0-9]{1,2}[-][0-9]{2,3}\b", i) != -1:
-            phone_list_dop.append(
-                re.find(r"[+380]?[(]?[0-9]{2}[)]?[0-9]{3}[-][0-9]{1,2}[-][0-9]{2,3}\b", i))
-            input_list.remove(i)
-    command_phone.value = phone_list_dop
-    # ------------------------------Пошук дати народження---------------------------------------------
-    date_birthday = None
-    for i in input_list:
-        if (re.find(r"[0-9]{4}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{2}", i) != - 1):
-            date_birthday = re.find(
-                r"[0-9]{4}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{2}", i)
-            break
-        if (re.find(r"[0-9]{2}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{4}", i) != - 1):
-            date_birthday = re.find(
-                r"[0-9]{2}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{4}", i)
-            break
-    command_birthday.value = date_birthday
-    new_record = Record(name, phone_list_dop, date_birthday)
-    # ----------------------------Виконання команди--------------------------------------
+# ------------------------------Пошук імені -----------------------------------------------
+    if (input_com == "add") or (input_com == "change") or (input_com == "phone") or (input_com == "birthday"):
+        for i in input_list:
+            if i.isalpha():
+                name = i
+                command_name.value = i
+                input_list.remove(i)
+                break
+# ------------------------------Пошук телефону------------------------------------------------
+    if (input_com == "add") or (input_com == "change"):
+        command_phone = []
+        phone_id = 0
+        s = re.findall(
+            r"[+380]?[(]?[0-9]{2}[)]?[0-9]{3}[-]?[0-9]{1,2}[-]?[0-9]{2,3}\b", " ".join(input_list))
+        if s != None:
+            for i in s:
+                i_phone = Phone()
+                i_phone.value = i
+                command_phone.append(i_phone)
+                input_list = (" ".join(input_list).replace(i, "")).split(" ")
+# ------------------------------Пошук дати народження---------------------------------------------
+        date_birthday = None
+        for i in input_list:
+            if (re.search(r"[0-9]{4}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{2}\b", i) != None):
+                date_birthday = re.search(
+                    r"[0-9]{4}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{2}\b", i).string
+                break
+            if (re.search(r"[0-9]{2}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{4}\b", i) != None):
+                date_birthday = re.search(
+                    r"[0-9]{2}[-]?[/]?[.]?[0-9]{2}[-]?[/]?[.]?[0-9]{4}\b", i).string
+                break
+        command_birthday.value = date_birthday
+# ----------------------------Виконання команди--------------------------------------
     if input_com == "hello":
         user_1.command_hello()
     elif (input_com == "close") or (input_com == "exit") or (input_com == "good bye"):
         user_1.command_exit()
     elif input_com == "add":
         try:
+            new_record = Record(command_name, command_phone, command_birthday)
             address_book.add_record(new_record)
         except:
             print("Give me name and phone please!")
     elif input_com == "change":
         try:
+            new_record = Record(command_name, command_phone, command_birthday)
             address_book.change_record(new_record)
         except:
             print("Give me name and phone please!")
@@ -79,6 +84,7 @@ while True:
     elif input_com == "show all":
         address_book.show_all()
     elif input_com == "birthday":
-        new_record.days_to_birthday()
+        command_record = address_book.search_record(name)
+        print(command_record.days_to_birthday(), " days")
     else:
         print("Command undefined! Try again!")
