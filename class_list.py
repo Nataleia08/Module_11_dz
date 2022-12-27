@@ -1,7 +1,7 @@
 import re
 import sys
 from collections import UserDict
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 
 class Field():
@@ -83,18 +83,6 @@ class Record():
         self.name = name
         self.date = date
         self.phone = phone
-        # self.phone = []
-        # if type(phone) == Phone:
-        #     self.phone.append(phone)
-        # elif type(phone) == str:
-        #     p_list = phone.strip().split(" ")
-        #     for p in p_list:
-        #         self.phone.append(Phone(p))
-        # elif type(phone) == list:
-        #     for p in phone:
-        #         self.phone.append(Phone(p))
-        # else:
-        #     self.phone.append(Phone(str(phone)))
 
     def add_phone(self, phone_new):
         self.phone.append(Phone(phone_new))
@@ -116,9 +104,9 @@ class Record():
             now_day = datetime.now().date()
             birthday_now = datetime(
                 year=2023, month=self.date.value.month, day=self.date.value.day).date()
-            days_count = now_day - birthday_now
+            days_count = birthday_now - now_day
             if days_count.days > 365:
-                days_count.days = days_count.days - 365
+                days_count = days_count - timedelta(days=365)
             return days_count
 
 
@@ -201,7 +189,8 @@ class AddressBook(UserDict):
             for key_name in self.data.keys():
                 k = key_name.title()
                 result.append(k)
-                result.append(self.data[key_name].date.value)
+                d = str(self.data[key_name].date.value.date())
+                result.append(d)
                 phone_l = self.data[key_name].phone
                 for i in phone_l:
                     result.append(str(i.value))
@@ -214,11 +203,6 @@ class AddressBook(UserDict):
         for key_name in self.data.keys():
             if key_name == name:
                 return self.data[key_name]
-
-
-# class AddressBookPage:
-#     def __iter__(self):
-#         return AddressBook()
 
 
 class User():

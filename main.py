@@ -85,6 +85,6 @@ while True:
         address_book.show_all()
     elif input_com == "birthday":
         command_record = address_book.search_record(name)
-        print(command_record.days_to_birthday(), " days")
+        print("by", command_record.days_to_birthday().days, "days")
     else:
         print("Command undefined! Try again!")
