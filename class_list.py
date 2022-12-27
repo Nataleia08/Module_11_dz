@@ -121,10 +121,10 @@ class AddressBook(UserDict):
         return self
 
     def __next__(self):
-        if (len(self.data) % 50) == 0:
-            max_page = int(len(self.data)/50)
+        if (len(self.data) % self.on_pages) == 0:
+            max_page = int(len(self.data)/self.on_pages)
         else:
-            max_page = int(len(self.data)//50 + 1)
+            max_page = int(len(self.data)//self.on_pages + 1)
         try:
             result = []
             for key_name in self.data.keys():
@@ -189,8 +189,9 @@ class AddressBook(UserDict):
             for key_name in self.data.keys():
                 k = key_name.title()
                 result.append(k)
-                d = str(self.data[key_name].date.value.date())
-                result.append(d)
+                if self.data[key_name].date.value != None:
+                    d = str(self.data[key_name].date.value.date())
+                    result.append(d)
                 phone_l = self.data[key_name].phone
                 for i in phone_l:
                     result.append(str(i.value))

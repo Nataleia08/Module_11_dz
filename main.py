@@ -72,6 +72,10 @@ while True:
             print("Give me name and phone please!")
     elif input_com == "change":
         try:
+            command_record = address_book.search_record(name)
+            command_name = command_record.name
+            if command_birthday.value == None:
+                command_birthday = command_record.date
             new_record = Record(command_name, command_phone, command_birthday)
             address_book.change_record(new_record)
         except:
@@ -82,9 +86,15 @@ while True:
         except:
             print("Enter user name!")
     elif input_com == "show all":
-        address_book.show_all()
+        try:
+            address_book.show_all()
+        except:
+            print("No data!")
     elif input_com == "birthday":
-        command_record = address_book.search_record(name)
-        print("by", command_record.days_to_birthday().days, "days")
+        try:
+            command_record = address_book.search_record(name)
+            print("by", command_record.days_to_birthday().days, "days")
+        except:
+            print("No date!")
     else:
         print("Command undefined! Try again!")
