@@ -114,7 +114,7 @@ class AddressBook(UserDict):
     def __init__(self) -> None:
         UserDict.__init__(self)
         self.current_page = 1
-        self.on_pages = 50
+        self.on_pages = 5
         self.number_record = 0
 
     def __iter__(self):
