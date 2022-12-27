@@ -65,12 +65,18 @@ while True:
         user_1.command_exit()
     elif input_com == "add":
         try:
+            if (not name) or (len(command_phone) == 0):
+                print("Give me name and phone please!")
+                continue
             new_record = Record(command_name, command_phone, command_birthday)
             address_book.add_record(new_record)
         except:
             print("Give me name and phone please!")
     elif input_com == "change":
         try:
+            if (not name) or (len(command_phone) == 0):
+                print("Give me name and phone please!")
+                continue
             command_record = address_book.search_record(name)
             command_name = command_record.name
             if command_birthday.value == None:
