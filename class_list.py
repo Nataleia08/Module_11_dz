@@ -75,7 +75,7 @@ class Birthday(Field):
                     self.__value = datetime(
                         year=int(d_list[-1]), month=int(d_list[-2]), day=int(d_list[-3]))
             except:
-                print("This is not a date!")
+                print("This is not a date! Date not save!")
 
 
 class Record():
