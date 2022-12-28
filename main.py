@@ -7,7 +7,7 @@ from class_list import Field, Name, Phone, Record, AddressBook, User, Birthday
 address_book = AddressBook()
 user_1 = User()
 command_list = ["hello", "add", "change",
-                "phone", "show all", "close", "exit", "good bye", "birthday", "show all on page"]
+                "phone", "show all", "close", "exit", "good bye", "birthday", "on page"]
 while True:
     command_name = Name()
     command_birthday = Birthday()
@@ -101,9 +101,12 @@ while True:
             print("by", command_record.days_to_birthday().days, "days")
         except:
             print("No date!")
-    elif input_com == "show all on page":
+    elif input_com == "on page":
         try:
-            next(address_book)
+            records_on_pages = int(input("Input count records on pages:"))
+            for i in address_book.iterator(records_on_pages):
+                print("Pages:")
+                print(i)
         except:
             print("No data!")
     else:

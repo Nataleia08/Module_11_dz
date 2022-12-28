@@ -113,37 +113,42 @@ class Record():
 class AddressBook(UserDict):
     def __init__(self) -> None:
         UserDict.__init__(self)
-        self.current_page = 1
-        self.on_pages = 2
+        # self.on_pages = 2
         self.number_record = 0
+        self.current_page = 1
+        self.numbers_record = 0
 
-    def __iter__(self):
-        return self
+    # def __iter__(self):
+    #     return self
 
-    def __next__(self):
-        if (len(self.data) % self.on_pages) == 0:
-            max_page = int(len(self.data)/self.on_pages)
+    def iterator(self, on_pages):
+        result = []
+        self.numbers_record = len(self.data)
+        if (len(self.data) % on_pages) == 0:
+            max_page = int(self.numbers_record/on_pages)
         else:
-            max_page = int(len(self.data)//self.on_pages + 1)
+            max_page = int(self.numbers_record//on_pages + 1)
         try:
-            result = []
             for key_name in self.data.keys():
-                while self.current_page*self.on_pages < self.number_record:
-                    k = key_name.title()
-                    result.append(k)
-                    self.number_record += 1
-                    phone_l = self.data[key_name].phone
-                    for i in phone_l:
-                        result.append(str(i.value))
-                    result.append("\n")
-            yield (" ".join(result))
+                k = key_name.title()
+                result.append(k)
+                self.number_record += 1
+                if self.data[key_name].date.value != None:
+                    d = str(self.data[key_name].date.value.date())
+                    result.append(d)
+                phone_l = self.data[key_name].phone
+                for i in phone_l:
+                    result.append(str(i.value))
+                result.append("\n")
+                if (self.current_page*on_pages > self.number_record):
+                    yield (" ".join(result))
+                    result.clear()
             if self.current_page <= max_page:
                 self.current_page += 1
             else:
                 self.current_page = 1
         except Exception as e:
             print("Error!", e.args)
-        raise StopIteration
 
     def add_record(self, record: Record):
         """Функція додання запису"""
