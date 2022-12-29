@@ -129,24 +129,28 @@ class AddressBook(UserDict):
         else:
             max_page = int(self.numbers_record//on_pages + 1)
         try:
-            for key_name in self.data.keys():
-                k = key_name.title()
-                result.append(k)
-                self.number_record += 1
-                if self.data[key_name].date.value != None:
-                    d = str(self.data[key_name].date.value.date())
-                    result.append(d)
-                phone_l = self.data[key_name].phone
-                for i in phone_l:
-                    result.append(str(i.value))
-                result.append("\n")
-                if (self.current_page*on_pages > self.number_record):
+            for i, (key_name, val) in enumerate(self.data.items()):
+                i += 1
+                if (i <= self.current_page*on_pages) and (i > (self.current_page-1)*on_pages):
+                    k = key_name.title()
+                    result.append(k)
+                    self.number_record += 1
+                    if self.data[key_name].date.value != None:
+                        d = str(self.data[key_name].date.value.date())
+                        result.append(d)
+                    phone_l = self.data[key_name].phone
+                    for h in phone_l:
+                        result.append(str(h.value))
+                        result.append("\n")
+                if (self.current_page*on_pages <= self.number_record):
+                    if self.current_page < max_page:
+                        self.current_page += 1
+                    else:
+                        self.current_page = 1
                     yield (" ".join(result))
                     result.clear()
-            if self.current_page <= max_page:
-                self.current_page += 1
-            else:
-                self.current_page = 1
+            self.current_page = 1
+            self.number_record = 0
         except Exception as e:
             print("Error!", e.args)
 

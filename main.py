@@ -104,9 +104,10 @@ while True:
     elif input_com == "on page":
         try:
             records_on_pages = int(input("Input count records on pages:"))
-            for i in address_book.iterator(records_on_pages):
-                print("Pages:")
-                print(i)
+            n_p_b = 1
+            for p_b in address_book.iterator(records_on_pages):
+                print("Pages:", n_p_b, p_b)
+                n_p_b += 1
         except:
             print("No data!")
     else:
