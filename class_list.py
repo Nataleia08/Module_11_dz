@@ -142,7 +142,7 @@ class AddressBook(UserDict):
                     for h in phone_l:
                         result.append(str(h.value))
                         result.append("\n")
-                if (self.current_page*on_pages <= self.number_record):
+                if (self.current_page*on_pages <= self.number_record) or (self.number_record == self.numbers_record):
                     if self.current_page < max_page:
                         self.current_page += 1
                     else:
