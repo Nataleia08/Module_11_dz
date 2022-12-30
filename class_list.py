@@ -118,9 +118,6 @@ class AddressBook(UserDict):
         self.current_page = 1
         self.numbers_record = 0
 
-    # def __iter__(self):
-    #     return self
-
     def iterator(self, on_pages):
         result = []
         self.numbers_record = len(self.data)
