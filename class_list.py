@@ -107,6 +107,8 @@ class Record():
             days_count = birthday_now - now_day
             if days_count.days > 365:
                 days_count = days_count - timedelta(days=365)
+            if days_count.days < 0:
+                days_count = days_count + timedelta(days=365)
             return days_count
 
 
